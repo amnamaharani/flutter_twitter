@@ -17,7 +17,9 @@ class AuthService {
           {
             'name' : name,
             'email' : email,
-            'profilePicture' : ''
+            'profilePicture' : '',
+            'coverImage' : '',
+            'bio' : '',
           }
         );
         return true;
