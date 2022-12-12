@@ -8,7 +8,12 @@ import 'package:flutter_twitter/screens/search_screen.dart';
 import 'package:flutter_twitter/theme/colors.dart';
 
 class FeedScreen extends StatefulWidget {
-  const FeedScreen({super.key});
+  final String currentUserId;
+
+  const FeedScreen({
+    Key? key,
+    required this.currentUserId,
+  }): super (key: key);
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
@@ -16,17 +21,19 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   int selectedTab = 0;
-  List<Widget> feedScreens = [
-    const HomeScreen(),
-    const SearchScreen(),
-    const NotificationScreen(),
-    const ProfileScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: feedScreens.elementAt(selectedTab),
+      body: [
+        const HomeScreen(),
+        const SearchScreen(),
+        const NotificationScreen(),
+        ProfileScreen(
+          currentUserId: widget.currentUserId,
+          visitedUserId: widget.currentUserId,
+        ),
+      ].elementAt(selectedTab),
       floatingActionButton: FloatingActionButton(
         onPressed: () { 
           Navigator.push(context, 
