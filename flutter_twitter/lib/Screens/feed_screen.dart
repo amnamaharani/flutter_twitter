@@ -34,15 +34,6 @@ class _FeedScreenState extends State<FeedScreen> {
           visitedUserId: widget.currentUserId,
         ),
       ].elementAt(selectedTab),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () { 
-          Navigator.push(context, 
-          MaterialPageRoute(builder: ((context) => const CreateTweetScreen())
-          ));
-        },
-        backgroundColor: Colors.white,
-        child: Image.asset('assets/tweet.png'),
-      ),
       bottomNavigationBar: CupertinoTabBar(
         onTap: (index) {
           setState(() {
