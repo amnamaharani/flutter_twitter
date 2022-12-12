@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter/Screens/login_screen.dart';
-import 'package:flutter_twitter/Screens/registration_screen.dart';
+import 'package:flutter_twitter/screens/login_screen.dart';
+import 'package:flutter_twitter/screens/registration_screen.dart';
 
 import '../widgets/rounded_button.dart';
 
