@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_twitter/theme/colors.dart';
 
 class RoundedButton extends StatelessWidget {
   final String btnText;
@@ -15,7 +16,7 @@ class RoundedButton extends StatelessWidget {
       height: 60,
       decoration: BoxDecoration(
          borderRadius: BorderRadius.circular(25),
-         color: const Color(0xff00acee),
+         color: KTweeterColor,
       ),
       child: Center(
         child: Text(

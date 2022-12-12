@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_twitter/service/auth_service.dart';
+import 'package:flutter_twitter/theme/colors.dart';
 import 'package:flutter_twitter/widgets/rounded_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xff00acee),
+        backgroundColor: KTweeterColor,
         centerTitle: true,
         elevation: 0,
         title: const Text(

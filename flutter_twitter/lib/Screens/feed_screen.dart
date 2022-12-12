@@ -5,6 +5,7 @@ import 'package:flutter_twitter/screens/home_screen.dart';
 import 'package:flutter_twitter/screens/notification_screen.dart';
 import 'package:flutter_twitter/screens/profile_screen.dart';
 import 'package:flutter_twitter/screens/search_screen.dart';
+import 'package:flutter_twitter/theme/colors.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -41,7 +42,7 @@ class _FeedScreenState extends State<FeedScreen> {
             selectedTab = index;
           });
         },
-        activeColor: const Color(0xff00acee),
+        activeColor: KTweeterColor,
         currentIndex: selectedTab,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home)),
