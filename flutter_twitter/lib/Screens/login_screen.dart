@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_twitter/service/auth_service.dart';
 import 'package:flutter_twitter/widgets/rounded_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,8 +10,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late String _email;
-  late String _password;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +34,31 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             const SizedBox(height: 20,),
             TextField(
+              controller: emailController,
               decoration: const InputDecoration(
-                hintText: 'Enter your email',
+                hintText: 'email',
               ),
-              onChanged: (value) {
-                _email = value;
-              },
             ),
             const SizedBox(height: 40,),
             TextField(
+              controller: passwordController,
               decoration: const InputDecoration(
-                hintText: 'Enter your password',
+                hintText: 'password',
               ),
-              onChanged: (value) {
-                _password = value;
-              },
             ),
             const SizedBox(height: 40,),
-            const RoundedButton(btnText: 'LOG IN'),
+            InkWell(
+              onTap: () async {
+                bool isValid = await AuthService.login(emailController.text,passwordController.text);
+                if(isValid) {
+                  Navigator.pop(context);
+                } else {
+                  print('login problem');
+                }
+              },
+              child: const RoundedButton(
+                btnText: 'LOG IN')
+            ),
           ],
         ),
       ),
