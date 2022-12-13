@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_twitter/model/user_model.dart';
+import 'package:flutter_twitter/screens/edit_profile_screen.dart';
 import 'package:flutter_twitter/service/database_service.dart';
 import 'package:flutter_twitter/theme/colors.dart';
 
@@ -178,22 +179,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ? null
                             : NetworkImage(userModel.profilePicture),
                         ),
-                        Container(
-                          width: 100,
-                          height: 25,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                            border: Border.all(color: KTweeterColor)
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Edit',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: KTweeterColor,
-                                fontWeight: FontWeight.bold
+                        GestureDetector(
+                          onTap: (() {
+                            Navigator.push(context, MaterialPageRoute(builder: 
+                            (context) => EditProfileScreen(
+                              user: userModel
+                            ) ));
+                          }),
+                          child: Container(
+                            width: 100,
+                            height: 25,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                              border: Border.all(color: KTweeterColor)
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Edit',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: KTweeterColor,
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
                             ),
                           ),
