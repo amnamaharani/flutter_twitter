@@ -63,16 +63,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget buildProfileWidgets(){
     switch(_profileSegmentedValue){
       case 0:
-        return Center(child: Text('Tweets'),);
+        return const Center(child: Text('Tweets'),);
         break;
       case 1:
-        return Center(child: Text('Media'),);
+        return const Center(child: Text('Media'),);
         break;
       case 2:
-        return Center(child: Text('Likes'),);
+        return const Center(child: Text('Likes'),);
         break;  
       default:
-        return Center(child: Text('Something wrong'),);
+        return const Center(child: Text('Something wrong'),);
         break;  
     }
   }
@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if(!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(KTweeterColor),
+                valueColor: AlwaysStoppedAnimation(kTweeterColor),
               ),
             );
           }
@@ -123,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Container(
                 height: 150,
                 decoration: BoxDecoration(
-                  color: KTweeterColor,
+                  color: kTweeterColor,
                   image: userModel.coverImage.isEmpty
                     ? null
                     : DecorationImage(
@@ -193,14 +193,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white,
-                              border: Border.all(color: KTweeterColor)
+                              border: Border.all(color: kTweeterColor)
                             ),
                             child: const Center(
                               child: Text(
                                 'Edit',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: KTweeterColor,
+                                  color: kTweeterColor,
                                   fontWeight: FontWeight.bold
                                 ),
                               ),
@@ -247,11 +247,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 20,),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: CupertinoSlidingSegmentedControl(
                         groupValue: _profileSegmentedValue,
-                        thumbColor: KTweeterColor,
+                        thumbColor: kTweeterColor,
                         backgroundColor: Colors.blueGrey,
                         children: _profiletabs,
                         onValueChanged: (i) {

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter/screens/create_tweet_screen.dart';
 import 'package:flutter_twitter/screens/home_screen.dart';
 import 'package:flutter_twitter/screens/notification_screen.dart';
 import 'package:flutter_twitter/screens/profile_screen.dart';
@@ -40,7 +39,7 @@ class _FeedScreenState extends State<FeedScreen> {
             selectedTab = index;
           });
         },
-        activeColor: KTweeterColor,
+        activeColor: kTweeterColor,
         currentIndex: selectedTab,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home)),

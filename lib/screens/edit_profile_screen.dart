@@ -1,7 +1,4 @@
 
-
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_twitter/model/user_model.dart';
 import 'package:flutter_twitter/theme/colors.dart';
@@ -25,7 +22,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var _coverImage;
   late String _imagePickedType;
   final _formKey = GlobalKey <FormState>();
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   displayCoverImage() {
     if(_coverImage == null ) {
@@ -73,7 +70,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Container(
                 height: 150,
                 decoration: BoxDecoration(
-                  color: KTweeterColor,
+                  color: kTweeterColor,
                   image: _coverImage == null && widget.user.coverImage.isEmpty
                   ? null
                   : DecorationImage(
@@ -157,7 +154,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: KTweeterColor,
+                              color: kTweeterColor,
                             ),
                             child: const Center(
                               child: Text(
@@ -183,7 +180,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Name',
                           labelStyle: TextStyle(
-                            color: KTweeterColor
+                            color: kTweeterColor
                           ),
                         ),
                         validator: (input) => input!.trim().length < 2 
@@ -199,7 +196,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Bio',
                           labelStyle: TextStyle(
-                            color: KTweeterColor
+                            color: kTweeterColor
                           ),
                         ),
                         validator: (input) => input!.trim().length < 2 
@@ -212,7 +209,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       const SizedBox(height: 30,),
                       _isLoading 
                       ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(KTweeterColor),
+                        valueColor: AlwaysStoppedAnimation(kTweeterColor),
                       )
                       : const SizedBox.shrink(),
                     ],
