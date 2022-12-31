@@ -16,7 +16,7 @@ class RoundedButton extends StatelessWidget {
       height: 60,
       decoration: BoxDecoration(
          borderRadius: BorderRadius.circular(25),
-         color: KTweeterColor,
+         color: kTweeterColor,
       ),
       child: Center(
         child: Text(

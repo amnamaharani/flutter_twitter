@@ -1,4 +1,4 @@
 import 'package:flutter/cupertino.dart';
 
-const Color KTweeterColor = const Color(0xff00acee);
+const Color kTweeterColor = Color(0xff00acee);
 

@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: KTweeterColor,
+        backgroundColor: kTweeterColor,
         centerTitle: true,
         elevation: 0,
         title: const Text(
