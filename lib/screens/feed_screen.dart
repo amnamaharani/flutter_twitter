@@ -26,7 +26,9 @@ class _FeedScreenState extends State<FeedScreen> {
     return Scaffold(
       body: [
         const HomeScreen(),
-        const SearchScreen(),
+        SearchScreen(
+          currentUserId: widget.currentUserId,
+        ),
         const NotificationScreen(),
         ProfileScreen(
           currentUserId: widget.currentUserId,
