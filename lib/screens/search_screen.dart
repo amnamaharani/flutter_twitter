@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_twitter/model/user_model.dart';
 import 'package:flutter_twitter/screens/profile_screen.dart';
 import 'package:flutter_twitter/service/database_service.dart';
+import 'package:flutter_twitter/theme/colors.dart';
 
 class SearchScreen extends StatefulWidget {
   final String currentUserId;
@@ -82,12 +83,13 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Icon(Icons.search, size: 200,),
+              Icon(Icons.search, size: 100, color: kTweeterColor,),
               Text(
                 'search user...',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w400,
+                  color: kTweeterColor
                 ),
               ),
             ],
