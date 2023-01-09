@@ -64,16 +64,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     switch(_profileSegmentedValue){
       case 0:
         return const Center(child: Text('Tweets'),);
-        break;
       case 1:
         return const Center(child: Text('Media'),);
-        break;
       case 2:
         return const Center(child: Text('Likes'),);
-        break;  
       default:
         return const Center(child: Text('Something wrong'),);
-        break;  
     }
   }
 

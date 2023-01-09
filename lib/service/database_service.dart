@@ -26,4 +26,13 @@ class DatabaseServices{
       'coverImage' : user.coverImage,
     });
   }
+
+  static Future<QuerySnapshot> searchUsers(String name) async {
+    Future<QuerySnapshot> users = usersRef
+      .where('name', isGreaterThanOrEqualTo: name)
+      .where('name', isLessThan: '${name}z')
+      .get();
+    
+    return users;
+  }
 }

@@ -27,7 +27,6 @@ class AuthService {
       return false;
 
     } catch(e) {
-      print(e);
       return false;
     }
   }
@@ -38,7 +37,6 @@ class AuthService {
       return true;
 
     } catch(e) {
-      print(e);
       return false;
     }
   }
