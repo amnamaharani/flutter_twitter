@@ -60,7 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               onTap: () async {
                 bool isValid = await AuthService.signUp(nameController.text,emailController.text,passwordController.text);
                 if(isValid) {
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 } else {
                   print('something wrong');
                 }

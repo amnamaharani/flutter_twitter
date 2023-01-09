@@ -16,8 +16,8 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  var _name;
-  var _bio;
+  late String _name;
+  late String _bio;
   var _profileImage;
   var _coverImage;
   late String _imagePickedType;
