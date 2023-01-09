@@ -1,7 +1,11 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_twitter/model/user_model.dart';
+import 'package:flutter_twitter/service/database_service.dart';
+import 'package:flutter_twitter/service/storage_service.dart';
 import 'package:flutter_twitter/theme/colors.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel user;
@@ -16,18 +20,20 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  var _name;
-  var _bio;
+  late String _name;
+  late String _bio;
   var _profileImage;
   var _coverImage;
   late String _imagePickedType;
   final _formKey = GlobalKey <FormState>();
-  final bool _isLoading = false;
+  bool _isLoading = false;
 
   displayCoverImage() {
     if(_coverImage == null ) {
       if(widget.user.coverImage.isEmpty) {
-        return NetworkImage(widget.user.profilePicture);
+        return const AssetImage('assets/profile_icon.png');
+      } else {
+        return NetworkImage(widget.user.coverImage);
       }
     } else {
       return FileImage(_coverImage);
@@ -37,7 +43,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   displayProfileImage() {
     if(_profileImage == null ) {
       if(widget.user.profilePicture.isEmpty) {
-        return const AssetImage('assets/logo.png');
+        return const AssetImage('assets/profile_icon.png');
       } else {
         return NetworkImage(widget.user.profilePicture);
       }
@@ -46,8 +52,64 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  saveProfile() {
+  handleImageFromGallery() async {
+    try{
+      XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      File? imageFile = File(image!.path);
+      setState(() {
+        if(imageFile != null) {
+          if(_imagePickedType == 'profile'){
+            _profileImage = imageFile;
+        } else if(_imagePickedType == 'cover'){
+            _coverImage = imageFile;
+        }
+        }
+      });
+    }catch(e){
+      print(e);
+    }
+  }
 
+  saveProfile() async {
+    _formKey.currentState!.save();
+    if(_formKey.currentState!.validate() && !_isLoading){
+      setState(() {
+        _isLoading = true;
+      });
+
+      String profilePictureUrl = '';
+      String coverPictureUrl= '';
+
+      if(_profileImage == null){
+        profilePictureUrl = widget.user.profilePicture;
+      } else {
+        profilePictureUrl = await StorageService.uploadProfilePicture(
+          widget.user.profilePicture,
+          _profileImage
+        );
+      }
+
+      if(_coverImage == null){
+        coverPictureUrl = widget.user.coverImage;
+      } else {
+        coverPictureUrl = await StorageService.uploadCoverPicture(
+          widget.user.coverImage,
+          _coverImage
+        );
+      }
+
+      UserModel user = UserModel(
+        id : widget.user.id,
+        name : _name,
+        profilePicture : profilePictureUrl,
+        bio: _bio,
+        coverImage: coverPictureUrl,
+        email: widget.user.email,
+      );
+      
+      DatabaseServices.updateUserData(user);
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -65,45 +127,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           parent: AlwaysScrollableScrollPhysics()
         ),
         children: [
-          Stack(
-            children: [
-              Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  color: kTweeterColor,
-                  image: _coverImage == null && widget.user.coverImage.isEmpty
-                  ? null
-                  : DecorationImage(
-                        fit: BoxFit.fill,
-                        image: displayCoverImage()
-                      )
+          GestureDetector(
+            onTap: () {
+              _imagePickedType = 'cover';
+              handleImageFromGallery();
+            },
+            child: Stack(
+              children: [
+                Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: kTweeterColor,
+                    image: _coverImage == null && widget.user.coverImage.isEmpty
+                    ? null
+                    : DecorationImage(
+                          fit: BoxFit.fill,
+                          image: displayCoverImage()
+                        )
+                  ),
                 ),
-              ),
-              Container(
-                height: 150,
-                color: Colors.black,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.camera_alt,
-                      size: 70,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      'Change Cover Photo',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+                /* Container(
+                  height: 150,
+                  color: Colors.black,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.camera_alt,
+                        size: 70,
                         color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                      Text(
+                        'Change Cover Photo',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ],
+                  ),
+                ), */
+              ],
+            ),
           ),
           Container(
             transform: Matrix4.translationValues(0, -45, 0),
@@ -111,40 +179,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: Column(
               children: [
                 Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 45,
-                              backgroundImage: displayProfileImage()
-                            ),
-                            CircleAvatar(
-                              radius: 45,
-                              backgroundColor: Colors.black,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.center,  
-                                children: const [
-                                  Icon(
-                                    Icons.camera_alt,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    'Change Profile Photo',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                        GestureDetector(
+                          onTap: () {
+                            _imagePickedType = 'profile';
+                            handleImageFromGallery();
+                          },
+                          child: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 45,
+                                backgroundImage: displayProfileImage()
                               ),
-                            ),
-                          ],
+                              /* CircleAvatar(
+                                radius: 45,
+                                backgroundColor: Colors.black,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  mainAxisAlignment: MainAxisAlignment.center,  
+                                  children: const [
+                                    Icon(
+                                      Icons.camera_alt,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      'Change Profile Photo',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ), */
+                            ],
+                          ),
                         ),
                         GestureDetector(
                           onTap: saveProfile,
