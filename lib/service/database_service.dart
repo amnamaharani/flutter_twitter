@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_twitter/service/firestore_service.dart';
+import 'package:flutter_twitter/model/user_model.dart';
+
+final fireStore = FirebaseFirestore.instance;
 
 final usersRef = fireStore.collection('users');
 final followersRef = fireStore.collection('followers');
@@ -14,5 +16,14 @@ class DatabaseServices{
   static Future<int> followingNum(String userId) async {
     QuerySnapshot followingSnapshot = await followingRef.doc(userId).collection('userFollowing').get();
     return followingSnapshot.docs.length;
+  }
+
+  static void updateUserData(UserModel user) {
+    usersRef.doc(user.id).update({
+      'name' : user.name,
+      'bio' : user.bio,
+      'profilePicture' : user.profilePicture,
+      'coverImage' : user.coverImage,
+    });
   }
 }

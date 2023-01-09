@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_twitter/model/user_model.dart';
+import 'package:flutter_twitter/service/database_service.dart';
+import 'package:flutter_twitter/service/storage_service.dart';
 import 'package:flutter_twitter/theme/colors.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,7 +26,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var _coverImage;
   late String _imagePickedType;
   final _formKey = GlobalKey <FormState>();
-  final bool _isLoading = false;
+  bool _isLoading = false;
 
   displayCoverImage() {
     if(_coverImage == null ) {
@@ -68,8 +70,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  saveProfile() {
+  saveProfile() async {
+    _formKey.currentState!.save();
+    if(_formKey.currentState!.validate() && !_isLoading){
+      setState(() {
+        _isLoading = true;
+      });
 
+      String profilePictureUrl = '';
+      String coverPictureUrl= '';
+
+      if(_profileImage == null){
+        profilePictureUrl = widget.user.profilePicture;
+      } else {
+        profilePictureUrl = await StorageService.uploadProfilePicture(
+          widget.user.profilePicture,
+          _profileImage
+        );
+      }
+
+      if(_coverImage == null){
+        coverPictureUrl = widget.user.coverImage;
+      } else {
+        coverPictureUrl = await StorageService.uploadCoverPicture(
+          widget.user.coverImage,
+          _coverImage
+        );
+      }
+
+      UserModel user = UserModel(
+        id : widget.user.id,
+        name : _name,
+        profilePicture : profilePictureUrl,
+        bio: _bio,
+        coverImage: coverPictureUrl,
+        email: widget.user.email,
+      );
+      
+      DatabaseServices.updateUserData(user);
+      Navigator.pop(context);
+    }
   }
 
   @override

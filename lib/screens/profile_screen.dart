@@ -180,12 +180,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : NetworkImage(userModel.profilePicture),
                         ),
                         GestureDetector(
-                          onTap: (() {
-                            Navigator.push(context, MaterialPageRoute(builder: 
-                            (context) => EditProfileScreen(
-                              user: userModel
-                            ) ));
-                          }),
+                          onTap: () async {
+                            await Navigator.push(
+                              context, 
+                              MaterialPageRoute(
+                                builder: (context) => EditProfileScreen(
+                                  user: userModel
+                                ) 
+                              )
+                            );
+                            setState(() {
+                              
+                            });
+                          },
                           child: Container(
                             width: 100,
                             height: 25,
