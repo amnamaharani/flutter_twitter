@@ -10,7 +10,7 @@ final storageRef = FirebaseStorage.instance.ref();
 class StorageService{
 
   static Future<String> uploadProfilePicture(String url, File imageFile) async{
-    String? uniquePhotoid = Uuid().v4();
+    String? uniquePhotoid = const Uuid().v4();
     File? image = await compressImage(uniquePhotoid, imageFile);
 
     if(url.isNotEmpty){
@@ -28,7 +28,7 @@ class StorageService{
   }
 
   static Future<String> uploadCoverPicture(String url, File imageFile) async{
-    String? uniquePhotoid = Uuid().v4();
+    String? uniquePhotoid = const Uuid().v4();
     File? image = await compressImage(uniquePhotoid, imageFile);
 
     if(url.isNotEmpty){

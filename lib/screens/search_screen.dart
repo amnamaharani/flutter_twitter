@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_twitter/theme/colors.dart';
+import 'package:flutter_twitter/model/user_model.dart';
+import 'package:flutter_twitter/screens/profile_screen.dart';
+import 'package:flutter_twitter/service/database_service.dart';
 
 class SearchScreen extends StatefulWidget {
   final String currentUserId;
@@ -15,14 +17,34 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  late Future<QuerySnapshot> _users;
-  TextEditingController _searchController = TextEditingController();
+  Future<QuerySnapshot>? _users;
+  final TextEditingController _searchController = TextEditingController();
 
   clearSearch() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _searchController.clear());
-    /* setState(() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _searchController.clear());
+    setState(() {
       _users = null;
-    }); */
+    });
+  }
+
+  buildUserTile(UserModel user) {
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 20,
+        backgroundImage: user.profilePicture.isEmpty
+          ? null
+          : NetworkImage(user.profilePicture)
+      ),
+      title: Text(user.name),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => ProfileScreen(
+            currentUserId: widget.currentUserId, 
+            visitedUserId: user.id,
+          ))
+        );
+      },
+    );
   }
 
   @override
@@ -47,13 +69,52 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             enabled: true,
             onChanged: (input) {
-              
+              if(input.isNotEmpty){
+                setState(() {
+                  _users = DatabaseServices.searchUsers(input);
+                });
+              }
             },
         ),
       ),
-      body: const Center(
-        child: Text('SearchScreen'),
-      ),
+      body: _users == null 
+        ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.search, size: 200,),
+              Text(
+                'search user...',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+        )
+        : FutureBuilder(
+          future: _users,
+          builder: (BuildContext context,AsyncSnapshot snapshot) {
+            if(!snapshot.hasData){
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if(snapshot.data.docs.length == 0) {
+              return const Center(
+                child: Text('No users found !'),
+              );
+            }
+            return ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (BuildContext context,int index) {
+                UserModel user = UserModel.fromDoc(snapshot.data.docs[index]);
+                return buildUserTile(user);
+              },
+            );
+          }
+        )
     );
   }
 }
